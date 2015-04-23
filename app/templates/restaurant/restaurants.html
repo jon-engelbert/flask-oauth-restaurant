@@ -33,7 +33,7 @@
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-10 padding-none">
-			<a href="{{url_for('newRestaurant')}}">
+			<a href="{{url_for('restaurant.newRestaurant')}}">
 				<button class="btn btn-default" id="new-restaurant">
 					<span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Add Restaurant
 				</button>
@@ -42,7 +42,7 @@
 		<div class="col-md-1"></div>
 	</div>
 	{% for restaurant in restaurants %}
-		<a href = "{{url_for('showMenu', restaurant_id = restaurant.id)}}">
+		<a href = "{{url_for('restaurant.showMenu', restaurant_id = restaurant.id)}}">
 			<div class="row">
 				<div class="col-md-1"></div>
 					<div class="col-md-10 restaurant-list">
