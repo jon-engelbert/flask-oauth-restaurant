@@ -40,21 +40,23 @@ def restaurantsJSON():
 def showRestaurants():
   restaurants = Restaurant.query.order_by(Restaurant.name)
   if 'user_id' in login_session:
+    print ('user_id in login_session')
     return render_template('restaurant/restaurants.html', restaurants = restaurants)
   else:
+    print ('user_id not in login_session')
     return render_template('restaurant/publicrestaurants.html', restaurants= restaurants)
 
 #Create a new restaurant
 @mod_restaurant.route('/new/', methods=['GET','POST'])
 def newRestaurant():
   if 'username' not in login_session:
-    return redirect('/login')
+    return redirect('/auth/login')
   if request.method == 'POST':
       newRestaurant = Restaurant(name = request.form['name'], user_id=login_session['user_id'])
-      Restaurant.add(newRestaurant)
+      db.session.add(newRestaurant)
       flash('New Restaurant %s Successfully Created' % newRestaurant.name)
-      session.commit()
-      return redirect(url_for('restaurant/showRestaurants'))
+      db.session.commit()
+      return redirect(url_for('showRestaurants'))
   else:
       return render_template('restaurant/newRestaurant.html')
 
@@ -64,15 +66,19 @@ def editRestaurant(restaurant_id):
     if 'username' not in login_session:
       return redirect('/auth/login')
     editedRestaurant = Restaurant.query.filter_by(id = restaurant_id).first()
-    if editedRestaurant.user_id == login_session.get('user_id'):
+    if editedRestaurant.user_id != login_session.get('user_id'):
         return redirect('/auth/login')
     if request.method == 'POST':
+        print("request.method == POST")
         if request.form['name']:
           editedRestaurant.name = request.form['name']
+          db.session.add(editedRestaurant)
+          db.session.commit()
           flash('Restaurant Successfully Edited %s' % editedRestaurant.name)
-          return redirect(url_for('restaurant/showRestaurants'))
+          return redirect(url_for('restaurant.showRestaurants'))
     else:
-      return render_template('restaurant/editRestaurant.html', restaurant = editedRestaurant)
+        print("request.method != POST")
+        return render_template('restaurant/editRestaurant.html', restaurant = editedRestaurant)
 
 
 #Delete a restaurant
@@ -84,10 +90,10 @@ def deleteRestaurant(restaurant_id):
     if restaurantToDelete.user_id != login_session.get('user_id'):
         return redirect('/auth/login')
     if request.method == 'POST':
-        session.delete(restaurantToDelete)
+        db.session.delete(restaurantToDelete)
         flash('%s Successfully Deleted' % restaurantToDelete.name)
-        session.commit()
-        return redirect(url_for('restaurant/showRestaurants', restaurant_id = restaurant_id))
+        db.session.commit()
+        return redirect(url_for('restaurant.showRestaurants'))
     else:
         return render_template('restaurant/deleteRestaurant.html',restaurant = restaurantToDelete)
 
@@ -95,14 +101,20 @@ def deleteRestaurant(restaurant_id):
 @mod_restaurant.route('/<int:restaurant_id>/')
 @mod_restaurant.route('/<int:restaurant_id>/menu/')
 def showMenu(restaurant_id):
+    print("********* in showMenu")
     restaurant = Restaurant.query.filter_by(id= restaurant_id).first()
     items = MenuItem.query.filter_by(restaurant_id= restaurant_id).all()
     creator = User.query.filter_by(id = restaurant.user_id).first()
-    stored_gplus_id = login_session.get('gplus_id')
-    if 'gplus_id' in login_session and restaurant.user_id == stored_gplus_id:
+    stored_user_id = login_session.get('user_id')
+    print ("stored_user_id {0}".format(stored_user_id))
+    print("login_session: {0}".format(login_session))
+    print("restaurant.user_id: {0}".format(restaurant.user_id))
+    if 'user_id' in login_session and restaurant.user_id == stored_user_id:
+        print("about to render restaurant/menu.html")
         return render_template('restaurant/menu.html', items=items, restaurant=restaurant, creator=creator)
     else:
-        return render_template('menuitem/publicmenu.html', items=items, restaurant=restaurant, creator= creator)
+        print("about to render restaurant/publicmenu.html")
+        return render_template('restaurant/publicmenu.html', items=items, restaurant=restaurant, creator= creator)
      
 
 

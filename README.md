@@ -1,5 +1,7 @@
-# OAuth2.0
-Starter Code for Auth&amp;Auth course
+# OAuth -- modified
+Based on Starter Code for Auth&amp;Auth course
+Some bugs fixed, including google+ authorization flow javascript code.  
+The main change is to restructure the app into modules, following example given in: https://www.digitalocean.com/community/tutorials/how-to-structure-large-flask-applications
 # Installing the Vagrant VM for ud330 - Authentication & Authorization
 
 **Note: If you already have a vagrant machine installed from previous Udacity courses skip to the 'Fetch the Source Code and VM Configuration' section**
@@ -53,8 +55,8 @@ Now that you have Vagrant up and running type **vagrant ssh** to log into your V
 
 Type **ls** to ensure that you are inside the directory that contains project.py, database_setup.py, and two directories named 'templates' and 'static'
 
-Now type **python database_setup.py** to initialize the database.
+Note: **python database_setup.py** is no longer necessary to initialize the database.  The database will be initialized at run time.
 
-Type **python lotsofmenus.py** to populate the database with restaurants and menu items. (Optional)
+Type **python lotsofmenus.py** to pre-populate the database with restaurants and menu items. (Optional)  You may need to run this command twice, the first time it may fail.
 
-Type **python project.py** to run the Flask web server. In your browser visit **http://localhost:5000** to view the restaurant menu app.  You should be able to view, add, edit, and delete menu items and restaurants.
+Type **python run.py** to run the Flask web server. In your browser visit **http://localhost:5000** to view the restaurant menu app.  You should be able to view, add, edit, and delete menu items and restaurants.
