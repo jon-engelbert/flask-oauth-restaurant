@@ -16,6 +16,15 @@ class Base(db.Model):
     date_modified = db.Column(db.DateTime,  default=db.func.current_timestamp(),
                                            onupdate=db.func.current_timestamp())
 
+    @staticmethod
+    def find_by_id(record_id):
+        return query.filter_by(id = record_id).first()
+
+    @staticmethod
+    def find_all():
+        return query.all()
+
+
 class User(Base):
     __tablename__ = 'user'
 
@@ -50,5 +59,21 @@ class User(Base):
                 break
             version += 1
         return new_nickname
-                    
+
+    @staticmethod
+    def create(login_session):
+        newUser = User(name = login_session['username'], email = login_session['email'], picture = login_session['picture'])
+        db.session.add(newUser)
+        db.session.commit()
+        user = User.query.filter_by(email = login_session['email']).first()
+        return user.id
+
+    @staticmethod
+    def find_id_by_email(email):
+        try:
+            user = User.query.filter_by(email = email).first()
+            return user.id
+        except:
+            return None
+
 

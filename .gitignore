@@ -1,4 +1,6 @@
 client_secrets.json
+fb_client_secrets.json
+*secrets.json
 env/
 *.db
 db_repository/

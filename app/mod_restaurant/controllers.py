@@ -101,14 +101,10 @@ def deleteRestaurant(restaurant_id):
 @mod_restaurant.route('/<int:restaurant_id>/')
 @mod_restaurant.route('/<int:restaurant_id>/menu/')
 def showMenu(restaurant_id):
-    print("********* in showMenu")
     restaurant = Restaurant.query.filter_by(id= restaurant_id).first()
     items = MenuItem.query.filter_by(restaurant_id= restaurant_id).all()
     creator = User.query.filter_by(id = restaurant.user_id).first()
     stored_user_id = login_session.get('user_id')
-    print ("stored_user_id {0}".format(stored_user_id))
-    print("login_session: {0}".format(login_session))
-    print("restaurant.user_id: {0}".format(restaurant.user_id))
     if 'user_id' in login_session and restaurant.user_id == stored_user_id:
         print("about to render restaurant/menu.html")
         return render_template('restaurant/menu.html', items=items, restaurant=restaurant, creator=creator)
