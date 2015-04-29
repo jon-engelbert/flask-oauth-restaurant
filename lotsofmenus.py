@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.mod_auth.models import Base 
-from app.mod_auth.models import User 
-from app.mod_restaurant.models import Restaurant 
-from app.mod_menuitem.models import MenuItem
+from pkg.mod_auth.models import Base 
+from pkg.mod_auth.models import User 
+from pkg.mod_restaurant.models import Restaurant 
+from pkg.mod_menuitem.models import MenuItem
 
 engine = create_engine('sqlite:///restaurantmenuwithusers.db')
 # Bind the engine to the metadata of the Base class so that the

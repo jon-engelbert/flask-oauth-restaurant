@@ -4,3 +4,11 @@ fb_client_secrets.json
 env/
 *.db
 db_repository/
+.Rhistory
+.vagrant/
+__pycache__/
+config.pyc
+oauth.sublime_project
+pkg/
+tests.pyc
+tmp/

@@ -40,8 +40,10 @@ class BaseConfiguration(object):
 
 class TestConfiguration(BaseConfiguration):
 	TESTING = True
+	SECRET_KEY = 'insecure-secret'
 	# WTF_CSRF_ENABLED = False
-	SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # + join(_cwd, 'testing.db')
+	SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'test.db')
+	# SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # + join(_cwd, 'testing.db')
 
 	# Since we want our unit tests to run quickly
 	# we turn this down - the hashing is still done
